@@ -34,7 +34,7 @@ const typeDefs = gql`
     # createBoard(writer: String, title: String, contents: String): String => 입력 데이터를 낱개로 보냄
     createBoard(createBoardInput: CreateBoardInput!): String # => 입력 데이터를 묶어서 보냄(실무형), 이거 만들때 type이 아니라 input으로 작성
     # 퀴즈
-    createTokenOfPhone(myphone: String): String
+    createTokenOfPhone(myphone: String!): String
   }
 `;
 
