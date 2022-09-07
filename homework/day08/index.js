@@ -42,7 +42,7 @@ app.patch("/tokens/phone", async (req, res) => {
   const { myphone, token } = req.body;
   console.log(myphone, token);
 
-  if (!(await Phone.findOne({ myphone }))) {
+  if (!(await Phone.findOne({ phone: myphone }))) {
     res.send(false);
     return;
   } else if (!(await Phone.findOne({ token }))) {
