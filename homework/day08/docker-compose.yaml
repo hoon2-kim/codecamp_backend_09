@@ -1,0 +1,17 @@
+version: "3.7"
+
+services:
+  my-backhomework:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./index.js:/myhomework/index.js
+      - ./phone.js:/myhomework/phone.js
+    ports:
+      - 3000:3000
+
+  my-bhomework:
+    image: mongo:5
+    ports:
+      - 27017:27017

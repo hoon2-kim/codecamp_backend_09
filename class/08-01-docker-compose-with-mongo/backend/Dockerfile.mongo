@@ -1,0 +1,3 @@
+# 설치되고 mongodb 자동으로 실행도해줌
+FROM mongo:5
+
