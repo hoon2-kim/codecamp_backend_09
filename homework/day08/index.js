@@ -34,8 +34,8 @@ app.post("/tokens/phone", async (req, res) => {
   }
 
   // 3. 핸드폰 번호에 토큰 전송
-  // sendTokenToSMS(myphone, token);
-  // res.send(`${myphone}으로 ${token}이 전송되었습니다.`);
+  sendTokenToSMS(myphone, token);
+  res.send(`${myphone}으로 ${token}이 전송되었습니다.`);
 });
 
 app.patch("/tokens/phone", async (req, res) => {
