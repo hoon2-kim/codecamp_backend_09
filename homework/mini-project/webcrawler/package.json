@@ -1,0 +1,11 @@
+{
+  "type": "module",
+  "scripts": {
+    "start:dev": "nodemon index.js"
+  },
+  "dependencies": {
+    "mongoose": "^6.6.0",
+    "nodemon": "^2.0.19",
+    "puppeteer": "^17.1.3"
+  }
+}
