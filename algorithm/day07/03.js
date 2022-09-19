@@ -13,24 +13,24 @@
 
 // 나의 답
 function solution(s) {
-  return (s.length === 4 || s.length === 6) && /^[0-9]+$/.test(s);
+    return (s.length === 4 || s.length === 6) && /^[0-9]+$/.test(s);
 }
 
 // -----------------------------------------------------------------------------------------
 
 // 멘토님
-function solution(s) {
-  if (s.length !== 4 && s.length !== 6) {
-    return false;
-  }
+// function solution(s) {
+//   if (s.length !== 4 && s.length !== 6) {
+//     return false;
+//   }
 
-  for (let i = 0; i < s.length; i++) {
-    if (isNaN(s[i]) === true) {
-      return false;
-    }
-  }
-  return true;
-}
+//   for (let i = 0; i < s.length; i++) {
+//     if (isNaN(s[i]) === true) {
+//       return false;
+//     }
+//   }
+//   return true;
+// }
 
 // isNaN은 문자열이 들어왔을 때 숫자로 한번 바꿔본다
 // Number.isNaN은 더 isNaN보다 더 엄격하다(진짜 NaN일 때만 true가 나온다)
