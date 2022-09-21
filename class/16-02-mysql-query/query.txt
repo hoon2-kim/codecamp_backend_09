@@ -1,0 +1,80 @@
+show databses
+;
+
+use myproject09
+;
+
+show tables
+;
+
+desc product
+;
+
+select *
+  from product
+;
+
+insert into product(id, name, description, price, isSoldout)
+	values(uuid(),"마우스","정말 좋은 마우스입니다!!!",15000, false)
+;
+
+insert into product(id, name, description, price, isSoldout)
+	values(uuid(),"노트북","최신 맥북!!",20000, false)
+;
+
+insert into product(id, name, description, price, isSoldout)
+	values(uuid(),"셔츠","깔끔한 셔츠입니다.",30000, false)
+;
+
+delete from product # 삭제
+ where name = "셔츠"
+;
+
+select * # *은 다보기 
+	from product_saleslocation
+;
+
+insert into product_saleslocation(id,address,addressDetail,lat,lng,meetingTime) #추가
+	values(uuid(),"구로구","구로디지털단지", 37.281723, 127.192387, "2022-12-31")
+;
+
+update product # 수정
+	set price = 18000
+  where name = "마우스"
+;
+
+update product # 수정 
+	set prouctSaleslocationId = "aed72692-3984-11ed-91c6-043b1bd4d7bb"
+  where name = "마우스"
+;
+
+select name,price # name,price만 검
+	from product
+;
+
+select p.id , name,price, address, addressDetail as "상세주소"   # 뒤에 as붙이면 원하는 이름으
+	from product p, product_saleslocation ps
+   where p.prductSaleslocationId = ps.id
+;
+
+# 추가기능들 - 1 / where절에는 and를 붙여 조건을 여러개 할 수 있
+update product
+	set isSoldout = true
+  where name = "노트북"
+    and price = 20000
+;
+
+# 추가기능들 - 2 / or도 가능
+update product
+	set price = 5000
+  where name = "노트북"
+     or name = "키보드"
+;
+
+# 추가기능들 - 3 / 실무에서 사용되는 방법 (update,delete 에서는 가급적 사용하지 않기)
+select * 
+	from product
+   where 1 = 1
+     and price = 5000
+     and location = "구로"
+     and isSoldout = false
