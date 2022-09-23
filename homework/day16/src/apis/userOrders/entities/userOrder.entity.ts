@@ -1,7 +1,14 @@
 import { Product } from 'src/apis/products/entities/product.entity';
 import { User } from 'src/apis/users/entities/user.entity';
 import { UserAddress } from 'src/apis/usersAddress/entities/userAddress.entity';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 export class UserOrder {
@@ -22,9 +29,6 @@ export class UserOrder {
 
   @ManyToOne(() => User)
   user: User;
-
-  @ManyToOne(() => UserAddress)
-  userAdress: UserAddress;
 
   @ManyToOne(() => Product)
   product: Product;

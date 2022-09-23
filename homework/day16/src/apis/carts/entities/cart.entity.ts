@@ -14,10 +14,10 @@ export class Cart {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ nullable: false })
+  @Column({ nullable: true })
   count: number;
 
-  @Column({ nullable: false })
+  @Column({ nullable: true })
   cartPriceTotal: number;
 
   @ManyToOne(() => Product)

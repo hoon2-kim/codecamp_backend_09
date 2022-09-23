@@ -7,16 +7,16 @@ export class Board {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
+  @Column({ type: 'varchar', length: 100 })
   title: string;
 
-  @Column()
+  @Column({ type: 'text' })
   contents: string;
 
-  @Column()
+  @Column({ type: 'timestamp' })
   createdAt: Date;
 
-  @Column()
+  @Column({ type: 'timestamp' })
   updatedAt: Date;
 
   @Column()

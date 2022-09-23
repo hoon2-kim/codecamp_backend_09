@@ -1,5 +1,13 @@
+import { UserOrder } from 'src/apis/userOrders/entities/userOrder.entity';
 import { User } from 'src/apis/users/entities/user.entity';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 export class UserAddress {
@@ -14,4 +22,8 @@ export class UserAddress {
 
   @ManyToOne(() => User)
   user: User;
+
+  @JoinColumn()
+  @OneToOne(() => UserOrder)
+  userOrder: UserOrder;
 }

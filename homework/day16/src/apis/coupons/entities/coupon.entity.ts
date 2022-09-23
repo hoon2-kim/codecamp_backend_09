@@ -21,7 +21,7 @@ export class Coupon {
   @Column()
   expiredAt: Date;
 
-  @Column({ nullable: false })
+  @Column({ nullable: true })
   usedAt: Date;
 
   @ManyToMany(() => User, (users) => users.coupons)

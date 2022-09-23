@@ -1,0 +1,110 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type ProductImage {
+  id: String!
+  image: String!
+  products: [Product!]!
+}
+
+type ProductDiscount {
+  id: String!
+  discountPrice: Int!
+}
+
+type Product {
+  id: String!
+  name: String!
+  price: Int!
+  deliveryPrice: Int!
+  maxQ: Int!
+  contents: String!
+  stock: Int!
+  productDiscount: ProductDiscount!
+  productImages: [ProductImage!]!
+}
+
+type BoardList {
+  id: String!
+  title: String!
+}
+
+type Coupon {
+  id: String!
+  name: String!
+  discountRate: Int!
+  discountPrice: Int!
+  issuedAt: DateTime!
+  expiredAt: DateTime!
+  usedAt: DateTime!
+  users: [User!]!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type User {
+  id: String!
+  password: String!
+  name: String!
+  birth: String!
+  gender: String!
+  userGrade: String!
+  userassignedAt: DateTime!
+  isActive: Boolean!
+  pointTotal: Int!
+  email: String!
+  isAgreedEmail: Boolean!
+  coupons: [Coupon!]!
+}
+
+type Point {
+  id: String!
+  name: String!
+  issuedAt: DateTime!
+  expiredAt: DateTime!
+  usedAt: DateTime!
+  isUsed: Boolean!
+  user: User!
+}
+
+type UserOrder {
+  id: String!
+  deliveryDate: DateTime!
+  deliveryAt: DateTime!
+  orderCount: Int!
+  orderAt: DateTime!
+  user: User!
+  product: Product!
+}
+
+type Query {
+  fetchProducts: [Product!]!
+  fetchProduct(productId: String!): Product!
+}
+
+type Mutation {
+  createProduct(createProductInput: CreateProductInput!): Product!
+  updateProduct(productId: String!, updateProductInput: UpdateProductInput!): Product!
+}
+
+input CreateProductInput {
+  name: String!
+  price: Int!
+  deliveryPrice: Int!
+  maxQ: Int!
+  contents: String!
+  stock: Int!
+}
+
+input UpdateProductInput {
+  name: String
+  price: Int
+  deliveryPrice: Int
+  maxQ: Int
+  contents: String
+  stock: Int
+}

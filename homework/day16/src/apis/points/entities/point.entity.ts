@@ -15,7 +15,7 @@ export class Point {
   @Column()
   expiredAt: Date;
 
-  @Column({ nullable: false })
+  @Column({ nullable: true })
   usedAt: Date;
 
   @Column()

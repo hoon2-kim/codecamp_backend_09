@@ -8,10 +8,10 @@ export class UserOrderPayment {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ nullable: false })
+  @Column({ nullable: true })
   couponPrice: number;
 
-  @Column({ nullable: false })
+  @Column({ nullable: true })
   pointPrice: number;
 
   @Column()

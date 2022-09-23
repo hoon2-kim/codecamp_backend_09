@@ -5,6 +5,6 @@ export class BoardList {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
+  @Column({ type: 'varchar', length: 50 })
   title: string;
 }

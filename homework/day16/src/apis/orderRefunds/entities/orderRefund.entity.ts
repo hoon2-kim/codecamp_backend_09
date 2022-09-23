@@ -12,10 +12,10 @@ export class OrderRefund {
   @Column()
   isRefunded: boolean;
 
-  @Column({ nullable: false })
+  @Column({ nullable: true })
   refundCoupon: number;
 
-  @Column({ nullable: false })
+  @Column({ nullable: true })
   refundPoint: number;
 
   @Column()
@@ -27,7 +27,7 @@ export class OrderRefund {
   @Column()
   createdAt: Date;
 
-  @Column({ nullable: false })
+  @Column({ nullable: true })
   processedAt: Date;
 
   @ManyToOne(() => UserOrder)
