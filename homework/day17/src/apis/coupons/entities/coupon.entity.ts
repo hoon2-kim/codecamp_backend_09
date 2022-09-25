@@ -9,15 +9,15 @@ export class Coupon {
   @Field(() => String)
   id: string;
 
-  @Column()
+  @Column({type: 'varchar', length:100})
   @Field(() => String)
   name: string;
 
-  @Column()
+  @Column({type: 'int'})
   @Field(() => Int)
   discountRate: number;
 
-  @Column()
+  @Column({type: 'int'})
   @Field(() => Int)
   discountPrice: number;
 

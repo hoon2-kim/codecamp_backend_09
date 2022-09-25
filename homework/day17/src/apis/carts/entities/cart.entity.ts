@@ -17,11 +17,11 @@ export class Cart {
   @Field(() => String)
   id: string;
 
-  @Column({ nullable: true })
+  @Column({type: 'int' , nullable: true })
   @Field(() => Int)
   count: number;
 
-  @Column({ nullable: true })
+  @Column({ type: 'int' ,nullable: true })
   @Field(() => Int)
   cartPriceTotal: number;
 

@@ -11,19 +11,19 @@ export class UserOrderPayment {
   @Field(() => String)
   id: string;
 
-  @Column({ nullable: true })
+  @Column({type:'int' ,nullable: true })
   @Field(() => Int)
   couponPrice: number;
 
-  @Column({ nullable: true })
+  @Column({type:'int', nullable: true })
   @Field(() => Int)
   pointPrice: number;
 
-  @Column()
+  @Column({type: 'int'})
   @Field(() => Int)
   price: number;
 
-  @Column()
+  @Column({type: 'int'})
   @Field(() => Int)
   priceTotal: number;
 
@@ -31,7 +31,7 @@ export class UserOrderPayment {
   @Field(() => Boolean)
   isProcessed: boolean;
 
-  @Column()
+  @Column({type:'varchar',length:50})
   @Field(() => String)
   orderState: string;
 

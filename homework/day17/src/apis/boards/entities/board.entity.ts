@@ -26,7 +26,7 @@ export class Board {
   @Field(() => Date)
   updatedAt: Date;
 
-  @Column()
+  @Column({type: 'boolean'})
   @Field(() => Boolean)
   isSecret: boolean;
 
