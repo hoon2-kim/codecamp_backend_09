@@ -56,9 +56,54 @@ function solution(nums) {
 //     let arr = Array.from(new Set(nums))
 //     let pick = nums.length/2
 
-//     return pick > arr.length ? arr.length : pick
+//     return pick >= arr.length ? arr.length : pick
 //   }
 
 // -----------------------------------------------------------------------------------------
 
 // 멘토님
+// function solution(nums) {
+//     const answer = [];
+
+//     for (let i = 0; i < nums.length; i++) {
+//         if (!answer.includes(nums[i]) && nums.length / 2 !== answer.length) {
+//             answer.push(nums[i]);
+//         }
+//     }
+//     return answer.length;
+// }
+
+// 다른풀이
+// function solution(nums) {
+//     const answer = new Set([]);
+
+//     for (let i = 0; i < nums.length; i++) {
+//         if (nums.length / 2 !== answer.size) {
+//             answer.add(nums[i]);
+//         }
+//     }
+//     return answer.size;
+// }
+
+// 다른풀이
+// function solution(nums) {
+//     const answer = [];
+
+//     nums.forEach((monster) => {
+//         if (!answer.includes(monster) && nums.length / 2 !== answer.length) {
+//             answer.push(monster);
+//         }
+//     });
+//     return answer.length;
+// }
+
+// 다른풀이
+// function solution(nums) {
+//     const answer = new Set(nums).size;
+//     const limit = nums.length / 2; // 최대한 넣을 수 있는 폰켓몬의 종류
+
+//     if (limit >= answer) {
+//         return answer;
+//     }
+//     return limit;
+// }

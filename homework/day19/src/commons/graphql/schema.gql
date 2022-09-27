@@ -39,6 +39,11 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+type BoardList {
+  id: String!
+  title: String!
+}
+
 type Coupon {
   id: String!
   name: String!
@@ -63,11 +68,6 @@ type User {
   email: String!
   isAgreedEmail: Boolean!
   coupons: [Coupon!]!
-}
-
-type BoardList {
-  id: String!
-  title: String!
 }
 
 type Point {
