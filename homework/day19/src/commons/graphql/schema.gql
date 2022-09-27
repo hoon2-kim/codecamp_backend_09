@@ -2,15 +2,20 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type ProductDiscount {
+  id: String!
+  discountPrice: Int!
+}
+
+type ProductCategory {
+  id: String!
+  categoryName: String!
+}
+
 type ProductImage {
   id: String!
   image: String!
   products: [Product!]!
-}
-
-type ProductDiscount {
-  id: String!
-  discountPrice: Int!
 }
 
 type Product {
@@ -19,16 +24,20 @@ type Product {
   price: Int!
   deliveryPrice: Int!
   maxQ: Int!
+  createdAt: DateTime!
+  updatedAt: DateTime
   contents: String!
   stock: Int!
+  productCategory: ProductCategory!
   productDiscount: ProductDiscount!
   productImages: [ProductImage!]!
+  deletedAt: DateTime
 }
 
-type BoardList {
-  id: String!
-  title: String!
-}
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
 
 type Coupon {
   id: String!
@@ -40,11 +49,6 @@ type Coupon {
   usedAt: DateTime!
   users: [User!]!
 }
-
-"""
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
-"""
-scalar DateTime
 
 type User {
   id: String!
@@ -61,14 +65,9 @@ type User {
   coupons: [Coupon!]!
 }
 
-type UserOrder {
+type BoardList {
   id: String!
-  deliveryDate: DateTime!
-  deliveryAt: DateTime!
-  orderCount: Int!
-  orderAt: DateTime!
-  user: User!
-  product: Product!
+  title: String!
 }
 
 type Point {
@@ -81,14 +80,28 @@ type Point {
   user: User!
 }
 
+type UserOrder {
+  id: String!
+  deliveryDate: DateTime!
+  deliveryAt: DateTime!
+  orderCount: Int!
+  orderAt: DateTime!
+  user: User!
+  product: Product!
+}
+
 type Query {
   fetchProducts: [Product!]!
   fetchProduct(productId: String!): Product!
+  fetchProductsWithDeleted: [Product!]!
 }
 
 type Mutation {
   createProduct(createProductInput: CreateProductInput!): Product!
   updateProduct(productId: String!, updateProductInput: UpdateProductInput!): Product!
+  deleteProduct(productId: String!): Boolean!
+  restoreProduct(productId: String!): Boolean!
+  createProductCategory(categoryName: String!): ProductCategory!
 }
 
 input CreateProductInput {
@@ -96,8 +109,16 @@ input CreateProductInput {
   price: Int!
   deliveryPrice: Int!
   maxQ: Int!
+  createdAt: DateTime!
+  updatedAt: DateTime
   contents: String!
   stock: Int!
+  productCategoryId: String!
+  productDiscount: ProductDiscountInput!
+}
+
+input ProductDiscountInput {
+  discountPrice: Int!
 }
 
 input UpdateProductInput {
@@ -105,6 +126,10 @@ input UpdateProductInput {
   price: Int
   deliveryPrice: Int
   maxQ: Int
+  createdAt: DateTime
+  updatedAt: DateTime
   contents: String
   stock: Int
+  productCategoryId: String
+  productDiscount: ProductDiscountInput
 }
