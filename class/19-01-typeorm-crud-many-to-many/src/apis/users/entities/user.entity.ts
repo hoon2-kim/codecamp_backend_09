@@ -1,15 +1,18 @@
 import { Field, ObjectType } from '@nestjs/graphql';
-
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 @ObjectType()
-export class ProductCategory {
-  @PrimaryGeneratedColumn('uuid')
+export class User {
   @Field(() => String)
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ type: 'varchar', length: 100, unique: true })
   @Field(() => String)
-  categoryName: string;
+  @Column()
+  email: string;
+
+  @Field(() => String)
+  @Column()
+  password: string;
 }
