@@ -1,6 +1,5 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
-import { UserOrder } from 'src/apis/userOrders/entities/userOrder.entity';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 @ObjectType()
@@ -40,8 +39,4 @@ export class OrderRefund {
   @Column({ nullable: true })
   @Field(() => Date)
   processedAt: Date;
-
-  @ManyToOne(() => UserOrder)
-  @Field(() => UserOrder)
-  userOrder: UserOrder;
 }

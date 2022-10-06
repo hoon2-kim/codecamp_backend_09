@@ -1,53 +1,53 @@
-import { Field, Int, ObjectType } from '@nestjs/graphql';
-import { Coupon } from 'src/apis/coupons/entities/coupon.entity';
-import { Point } from 'src/apis/points/entities/point.entity';
-import { UserOrder } from 'src/apis/userOrders/entities/userOrder.entity';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Field, Int, ObjectType, registerEnumType } from '@nestjs/graphql';
+import { Order } from 'src/apis/orders/entities/order.entity';
+
+import { User } from 'src/apis/users/entities/user.entity';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+
+export enum ORDER_PAYMENT_STATE_ENUM {
+  PAYMENT = 'PAYMENT',
+  CANCEL = 'CANCEL',
+}
+
+registerEnumType(ORDER_PAYMENT_STATE_ENUM, {
+  name: 'ORDER_PAYMENT_STATE_ENUM',
+});
 
 @Entity()
 @ObjectType()
-export class UserOrderPayment {
+export class OrderPayment {
   @PrimaryGeneratedColumn('uuid')
   @Field(() => String)
   id: string;
 
-  @Column({ type: 'int', nullable: true })
-  @Field(() => Int)
-  couponPrice: number;
-
-  @Column({ type: 'int', nullable: true })
-  @Field(() => Int)
-  pointPrice: number;
-
-  @Column({ type: 'int' })
-  @Field(() => Int)
-  price: number;
-
-  @Column({ type: 'int' })
-  @Field(() => Int)
-  priceTotal: number;
+  @Column()
+  @Field(() => String)
+  impUid: string;
 
   @Column()
-  @Field(() => Boolean)
-  isProcessed: boolean;
+  @Field(() => Int)
+  amount: number;
 
-  @Column({ type: 'varchar', length: 50 })
-  @Field(() => String)
+  @Column({ type: 'enum', enum: ORDER_PAYMENT_STATE_ENUM })
+  @Field(() => ORDER_PAYMENT_STATE_ENUM)
   orderState: string;
 
-  @Column()
+  @CreateDateColumn()
   @Field(() => Date)
-  processedAt: Date;
+  createdAt: Date;
 
-  @ManyToOne(() => Coupon)
-  @Field(() => Coupon)
-  coupon: Coupon;
+  @ManyToOne(() => User)
+  user: User;
 
-  @ManyToOne(() => Point)
-  @Field(() => Point)
-  point: Point;
-
-  @ManyToOne(() => UserOrder)
-  @Field(() => UserOrder)
-  userOrder: UserOrder;
+  @JoinColumn()
+  @OneToOne(() => Order)
+  order: Order;
 }

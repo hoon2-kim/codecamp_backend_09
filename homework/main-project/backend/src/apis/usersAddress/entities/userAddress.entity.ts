@@ -1,14 +1,7 @@
 import { Field, ObjectType } from '@nestjs/graphql';
-import { UserOrder } from 'src/apis/userOrders/entities/userOrder.entity';
+
 import { User } from 'src/apis/users/entities/user.entity';
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  OneToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 @ObjectType()
@@ -26,11 +19,5 @@ export class UserAddress {
   isMain: boolean;
 
   @ManyToOne(() => User)
-  @Field(() => User)
   user: User;
-
-  @JoinColumn()
-  @OneToOne(() => UserOrder)
-  @Field(() => UserOrder)
-  userOrder: UserOrder;
 }

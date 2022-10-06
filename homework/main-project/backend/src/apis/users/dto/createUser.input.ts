@@ -20,9 +20,10 @@ export class CreateUserInput {
   @Field(() => String, { defaultValue: 'Bronze' })
   userGrade: string;
 
-  @Field(() => Int, { defaultValue: 0 })
-  pointTotal: number;
-
   @Field(() => String)
   phone: string;
+
+  // 과제용 임시
+  @Field(() => Int, { defaultValue: 0 })
+  point: number;
 }

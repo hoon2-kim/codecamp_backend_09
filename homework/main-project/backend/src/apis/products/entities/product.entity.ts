@@ -11,6 +11,7 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { OrderPayment } from 'src/apis/orderPayments/entities/orderPayment.entity';
 
 @Entity()
 @ObjectType()

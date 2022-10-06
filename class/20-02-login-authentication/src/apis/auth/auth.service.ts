@@ -4,7 +4,7 @@ import { JwtService } from '@nestjs/jwt'; // yarn add @nestjs/jwt passport-jwt, 
 @Injectable()
 export class AuthService {
   constructor(
-    private readonly jwtService: JwtService, //
+    private readonly jwtService: JwtService, // import JwtService한거 써야하니 의존성 주입
   ) {}
 
   getAccessToken({ user }) {

@@ -1,11 +1,8 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
-import { Coupon } from 'src/apis/coupons/entities/coupon.entity';
 import {
   Column,
   DeleteDateColumn,
   Entity,
-  JoinTable,
-  ManyToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -28,42 +25,26 @@ export class User {
   // @Field(() => String)
   password: string;
 
-  @Column()
-  @Field(() => String)
+  @Column({ nullable: true })
+  @Field(() => String, { nullable: true })
   birth: string;
 
-  @Column()
-  @Field(() => String)
+  @Column({ nullable: true })
+  @Field(() => String, { nullable: true })
   gender: string;
 
   @Column({ default: 'Bronze' })
   @Field(() => String, { defaultValue: 'Bronze' })
   userGrade: string;
 
-  // @Column()
-  // @Field(() => Date)
-  // userassignedAt: Date;
-
-  // @Column()
-  // @Field(() => Boolean)
-  // isActive: boolean;
-
-  @Column({ default: 0 })
-  @Field(() => Int, { defaultValue: 0 })
-  pointTotal: number;
-
-  // @Column()
-  // @Field(() => Boolean)
-  // isAgreedEmail: boolean;
-
   @Column()
   @Field(() => String)
   phone: string;
 
-  @JoinTable()
-  @ManyToMany(() => Coupon, (coupons) => coupons.users)
-  @Field(() => [Coupon])
-  coupons: Coupon[];
+  // 과제용 임시
+  @Column({ default: 0 })
+  @Field(() => Int)
+  point: number;
 
   @DeleteDateColumn()
   deletedAt: Date;

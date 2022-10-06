@@ -2,37 +2,26 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type Coupon {
-  id: String!
-  name: String!
-  discountRate: Int!
-  discountPrice: Int!
-  issuedAt: DateTime!
-  expiredAt: DateTime!
-  usedAt: DateTime!
-  users: [User!]!
-}
-
-"""
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
-"""
-scalar DateTime
-
 type User {
   id: String!
   email: String!
   name: String!
-  birth: String!
-  gender: String!
+  birth: String
+  gender: String
   userGrade: String!
-  pointTotal: Int!
   phone: String!
-  coupons: [Coupon!]!
+  point: Int!
 }
 
 type ProductCategory {
   id: String!
   categoryName: String!
+}
+
+type ProductImage {
+  id: String!
+  image: String!
+  products: [Product!]!
 }
 
 type ProductDiscount {
@@ -56,35 +45,27 @@ type Product {
   deletedAt: DateTime
 }
 
-type ProductImage {
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type OrderPayment {
   id: String!
-  image: String!
-  products: [Product!]!
+  impUid: String!
+  amount: Int!
+  orderState: ORDER_PAYMENT_STATE_ENUM!
+  createdAt: DateTime!
+}
+
+enum ORDER_PAYMENT_STATE_ENUM {
+  PAYMENT
+  CANCEL
 }
 
 type BoardList {
   id: String!
   title: String!
-}
-
-type Point {
-  id: String!
-  name: String!
-  issuedAt: DateTime!
-  expiredAt: DateTime!
-  usedAt: DateTime!
-  isUsed: Boolean!
-  user: User!
-}
-
-type UserOrder {
-  id: String!
-  deliveryDate: DateTime!
-  deliveryAt: DateTime!
-  orderCount: Int!
-  orderAt: DateTime!
-  user: User!
-  product: Product!
 }
 
 type Query {
@@ -97,6 +78,8 @@ type Query {
 }
 
 type Mutation {
+  createOrderPayment(impUid: String!, amount: Int!): OrderPayment!
+  cancelPayment(impUid: String!, amount: Int!): OrderPayment!
   userLogin(email: String!, password: String!): String!
   restoreAccessToken: String!
   createProduct(createProductInput: CreateProductInput!): Product!
@@ -150,8 +133,8 @@ input CreateUserInput {
   birth: String!
   gender: String!
   userGrade: String = "Bronze"
-  pointTotal: Int = 0
   phone: String!
+  point: Int = 0
 }
 
 input UpdateUserInput {
@@ -161,6 +144,6 @@ input UpdateUserInput {
   birth: String
   gender: String
   userGrade: String = "Bronze"
-  pointTotal: Int = 0
   phone: String
+  point: Int = 0
 }

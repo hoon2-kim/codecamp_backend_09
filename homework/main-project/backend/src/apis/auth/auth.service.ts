@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { CreateUserInput } from '../users/dto/createUser.input';
 import { UsersService } from '../users/users.service';
 
 @Injectable()
@@ -14,7 +13,7 @@ export class AuthService {
   getAccessToken({ correctUser }) {
     return this.jwtService.sign(
       { email: correctUser.email, sub: correctUser.id },
-      { secret: 'myAccessKey', expiresIn: '20s' },
+      { secret: 'myAccessKey', expiresIn: '1h' },
     );
   }
 

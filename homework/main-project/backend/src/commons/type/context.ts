@@ -20,7 +20,7 @@ export interface IOAuthUser {
     | 'birth'
     | 'gender'
     | 'userGrade'
-    | 'pointTotal'
+    | 'point'
     | 'phone'
     | 'password'
   >;
