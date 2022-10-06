@@ -33,7 +33,6 @@ export class IamportService {
       console.log(e);
       return e;
     }
-    // try catch 사용하기, 변수에 저장해서 꺼내기
   }
 
   // 결제 취소

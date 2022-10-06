@@ -1,9 +1,16 @@
-import { Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  UnprocessableEntityException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
 import { User } from '../users/entities/user.entity';
-import { OrderPayment } from './entities/orderPayment.entity';
+import {
+  OrderPayment,
+  ORDER_PAYMENT_STATE_ENUM,
+} from './entities/orderPayment.entity';
 
 @Injectable()
 export class OrdersPaymentsService {
@@ -41,5 +48,37 @@ export class OrdersPaymentsService {
   // 결제테이블 impUid 찾기
   async findPaymentByimpUid({ impUid }) {
     return await this.ordersPaymentsRepository.findOne({ where: { impUid } });
+  }
+
+  // 결제 저장 검증
+  async checkPayment({ impUid, amount, paymentInfo }) {
+    // 잘못된 impUid
+    if (impUid !== paymentInfo.imp_uid)
+      throw new UnprocessableEntityException('유효한 아이디가 아닙니다.');
+
+    // 결제테이블에 이미 있다면
+    const isPayment = await this.ordersPaymentsRepository.findOne({
+      where: { impUid },
+    });
+    if (isPayment) throw new ConflictException('이미 결제 되었습니다.');
+
+    // 금액이 일치하지 않는다면
+    if (amount !== paymentInfo.amount)
+      throw new ConflictException('금액이 맞지 않습니다.');
+  }
+
+  // 결제 취소 검증
+  async checkCancelPayment({ impUid, amount }) {
+    // 결제 테이블에서 이미 취소 되어있다면 오류
+    const findState = await this.ordersPaymentsRepository.findOne({
+      where: { impUid },
+    });
+
+    if (findState.orderState === ORDER_PAYMENT_STATE_ENUM.CANCEL)
+      throw new UnprocessableEntityException('이미 취소된 결제 입니다.');
+
+    // 입력한 환불금액이 결제 테이블 금액보다 큰 경우 오류
+    if (amount > findState.amount)
+      throw new ConflictException('환불금액이 더 큽니다.');
   }
 }
