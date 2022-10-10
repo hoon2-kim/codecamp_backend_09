@@ -50,35 +50,36 @@ export class ProductService {
       ...productDiscount,
     });
 
-    // productImages
-    const temp = [];
-    for (let i = 0; i < productImages.length; i++) {
-      const imagename = productImages[i];
+    // // productImages
+    // const temp = [];
+    // for (let i = 0; i < productImages.length; i++) {
+    //   const imagename = productImages[i];
 
-      const prevImage = await this.productsImageRepository.findOne({
-        where: { image: imagename },
-      });
+    //   const prevImage = await this.productsImageRepository.findOne({
+    //     where: { id: createProductInput.id},
+    //   });
 
-      if (prevImage) {
-        temp.push(prevImage);
-      } else {
-        const newImage = await this.productsImageRepository.save({
-          image: imagename,
-        });
-        temp.push(newImage);
-      }
-      //
-    }
+    //   if (prevImage) {
+    //     this.productsDiscountRepository.delete({ productId: createProductInput.id });
+    //     temp.push(prevImage);
+    //   } else {
+    //     const newImage = await this.productsImageRepository.save({
+    //       //
+    //     });
+    //     temp.push(newImage);
+    //   }
+    //   //
+    // }
 
-    const result2 = await this.productsRepository.save({
-      ...product,
-      productDiscount: result,
-      productCategory: {
-        id: productCategoryId,
-      },
-      productImages: temp,
-    });
-    return result2;
+    // const result2 = await this.productsRepository.save({
+    //   ...product,
+    //   productDiscount: result,
+    //   productCategory: {
+    //     id: productCategoryId,
+    //   },
+    //   productImages: temp,
+    // });
+    // return result2;
   }
 
   // 상품 수정하기

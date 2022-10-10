@@ -1,12 +1,10 @@
 import { UseGuards } from '@nestjs/common';
-import { Args, Context, Int, Mutation, Resolver } from '@nestjs/graphql';
+import { Args, Int, Mutation, Resolver } from '@nestjs/graphql';
 import { GqlAuthAccessGuard } from 'src/commons/auth/gql-auth.guard';
-import { IContext } from 'src/commons/type/context';
+import { CurrentUser } from 'src/commons/auth/gql-user.param';
+import { IUser } from 'src/commons/type/context';
 import { IamportService } from '../iamport/iamport.service';
-import {
-  OrderPayment,
-  ORDER_PAYMENT_STATE_ENUM,
-} from './entities/orderPayment.entity';
+import { OrderPayment } from './entities/orderPayment.entity';
 import { OrdersPaymentsService } from './ordersPayments.service';
 
 @Resolver()
@@ -22,51 +20,18 @@ export class OrdersPaymentsResolver {
   async createOrderPayment(
     @Args('impUid') impUid: string, //
     @Args({ name: 'amount', type: () => Int }) amount: number,
-    @Context() context: IContext,
+    // @Context() context: IContext,
+    @CurrentUser() currentUser: IUser,
   ) {
-    // 결제토큰 변수에 저장
+    // 1. 아임포트 검증
     const paymentToken = await this.iamportService.getAccessToken();
-    console.log('paymentToken: ', paymentToken);
+    await this.iamportService.getPaymentInfo({ impUid, paymentToken, amount });
 
-    // 결제정보 변수에 저장
-    const paymentInfo = await this.iamportService.getPaymentInfo({
-      impUid,
-      paymentToken,
-    });
+    // 2. 테이블에 impUid 있는지 확인 (중복결제 방지)
+    await this.ordersPaymentsService.checkDuplicate({ impUid });
 
-    console.log('pay: ', paymentInfo);
-
-    // 검증
-    await this.ordersPaymentsService.checkPayment({
-      impUid,
-      amount,
-      paymentInfo,
-    });
-
-    // // 잘못된 impUid
-    // if (impUid !== paymentInfo.imp_uid)
-    //   throw new UnprocessableEntityException('유효한 아이디가 아닙니다.');
-
-    // // 결제테이블에 이미 있다면
-    // const isPayment = await this.ordersPaymentsService.findPaymentByimpUid({
-    //   impUid,
-    // });
-    // if (isPayment) throw new ConflictException('이미 결제 되었습니다.');
-
-    // // 금액이 일치하지 않는다면
-    // if (amount !== paymentInfo.amount)
-    //   throw new ConflictException('금액이 맞지 않습니다.');
-
-    // 다 통과하면 저장
-    const user = context.req.user;
-    // console.log('user: ', user);
-    const status = ORDER_PAYMENT_STATE_ENUM.PAYMENT;
-    return this.ordersPaymentsService.create({
-      impUid,
-      amount,
-      status,
-      user,
-    });
+    //
+    return this.ordersPaymentsService.create({ impUid, amount, currentUser });
   }
 
   // 결제 취소
@@ -75,36 +40,33 @@ export class OrdersPaymentsResolver {
   async cancelPayment(
     @Args('impUid') impUid: string, //
     @Args({ name: 'amount', type: () => Int }) amount: number,
-    @Context() context: IContext,
+    // @Context() context: IContext,
+    @CurrentUser() currentUser: IUser,
   ) {
-    const paymentToken = await this.iamportService.getAccessToken();
-
-    // // 결제 테이블에서 이미 취소 되어있다면 오류
-    // const findState = await this.ordersPaymentsService.findPaymentByimpUid({
-    //   impUid,
-    // });
-
-    // if (findState.orderState === ORDER_PAYMENT_STATE_ENUM.CANCEL)
-    //   throw new UnprocessableEntityException('이미 취소된 결제 입니다.');
-
-    // // 입력한 환불금액이 결제 테이블 금액보다 큰 경우 오류
-    // if (amount > findState.amount)
-    //   throw new ConflictException('환불금액이 더 큽니다.');
+    // console.log('context: ', currentUser);
 
     // 검증
-    await this.ordersPaymentsService.checkCancelPayment({ impUid, amount });
+    // 1. 취소 확인
+    await this.ordersPaymentsService.checkAlreadyCanceld({ impUid });
 
-    // import 결제 취소
-    await this.iamportService.cancel({ impUid, paymentToken });
-
-    // 오류 없고 취소내역 결제테이블 저장
-    const user = context.req.user;
-    const status = ORDER_PAYMENT_STATE_ENUM.CANCEL;
-    return this.ordersPaymentsService.create({
+    // 2. 취소가능한지 포인트 검증
+    await this.ordersPaymentsService.checkHasCancelablePoint({
       impUid,
-      amount: -amount,
-      status,
-      user,
+      currentUser,
+    });
+
+    // 3. 아임포트에 결제 취소 요청
+    const paymentToken = await this.iamportService.getAccessToken();
+    const cancelPayment = await this.iamportService.cancel({
+      impUid,
+      paymentToken,
+    });
+
+    // 4. 테이블에 결제 취소 등록
+    return await this.ordersPaymentsService.cancelCreate({
+      impUid,
+      amount: cancelPayment,
+      currentUser,
     });
   }
 }

@@ -4,6 +4,7 @@ import { ConfigModule } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './apis/auth/auth.module';
+import { FilesModule } from './apis/files/files.module';
 import { OrdersPaymentsModule } from './apis/orderPayments/ordersPayments.module';
 import { ProductModule } from './apis/products/product.module';
 import { ProdcutCategoriesModule } from './apis/productsCategories/productCategories.module';
@@ -11,6 +12,7 @@ import { UsersModule } from './apis/users/users.module';
 
 @Module({
   imports: [
+    FilesModule,
     OrdersPaymentsModule,
     AuthModule,
     ProductModule,

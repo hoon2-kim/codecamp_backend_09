@@ -1,4 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  HttpException,
+  Injectable,
+  UnprocessableEntityException,
+} from '@nestjs/common';
 
 import axios from 'axios';
 
@@ -6,55 +11,69 @@ import axios from 'axios';
 export class IamportService {
   // 토큰 발급 요청
   async getAccessToken() {
-    const getToken = await axios({
-      url: 'https://api.iamport.kr/users/getToken',
-      method: 'post', // POST method
-      headers: { 'Content-Type': 'application/json' }, // "Content-Type": "application/json"
-      data: {
-        imp_key: process.env.IMP_KEY, // REST API키
-        imp_secret: process.env.IMP_SECRET, // REST API Secret
-      },
-    });
-    return getToken.data.response.access_token;
+    try {
+      const getToken = await axios.post(
+        'https://api.iamport.kr/users/getToken',
+        {
+          imp_key: process.env.IMP_KEY,
+          imp_secret: process.env.IMP_SECRET,
+        },
+      );
+      return getToken.data.response.access_token;
+    } catch (error) {
+      throw new HttpException(
+        error.response.data.message,
+        error.response.status,
+      );
+    }
   }
 
   // 결제 정보 조회
-  async getPaymentInfo({ impUid, paymentToken }) {
+  async getPaymentInfo({ impUid, paymentToken, amount }) {
     try {
-      const paymentInfo = await axios({
-        url: `https://api.iamport.kr/payments/${impUid}`, // imp_uid 전달
-        method: 'get', // GET method
-        headers: { Authorization: paymentToken }, // 인증 토큰 Authorization header에 추가
-      });
+      const paymentInfo = await axios.get(
+        `https://api.iamport.kr/payments/${impUid}`,
+        {
+          headers: { Authorization: paymentToken },
+        },
+      );
 
-      const payInfo = paymentInfo.data.response;
-      return payInfo;
-    } catch (e) {
-      console.log(e);
-      return e;
+      // 검증
+      if (paymentInfo.data.response.status !== 'paid')
+        throw new ConflictException('결제 내역이 존재하지 않습니다.');
+
+      if (paymentInfo.data.response.amount !== amount)
+        throw new UnprocessableEntityException('결제 금액이 잘못되었습니다.');
+    } catch (error) {
+      if (error?.response?.data?.message) {
+        throw new HttpException(
+          error.response.data.message,
+          error.response.status,
+        );
+      } else {
+        throw error;
+      }
     }
   }
 
   // 결제 취소
   async cancel({ impUid, paymentToken }) {
     try {
-      await axios({
-        url: 'https://api.iamport.kr/payments/cancel',
-        method: 'post',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: paymentToken, // 아임포트 서버로부터 발급받은 엑세스 토큰
+      const cancelInfo = await axios.post(
+        'https://api.iamport.kr/payments/cancel',
+        {
+          imp_uid: impUid,
         },
-        data: {
-          // reason, // 가맹점 클라이언트로부터 받은 환불사유
-          imp_uid: impUid, // imp_uid를 환불 `unique key`로 입력
-          // amount, // 가맹점 클라이언트로부터 받은 환불금액
-          // checksum: cancelableAmount, // [권장] 환불 가능 금액 입력
+        {
+          headers: { Authorization: paymentToken },
         },
-      });
-    } catch (e) {
-      console.log(e);
-      return e;
+      );
+      return cancelInfo.data.response.cancel_amount;
+    } catch (error) {
+      throw new HttpException(
+        error.response.data.message,
+        error.response.status,
+      );
     }
   }
 }

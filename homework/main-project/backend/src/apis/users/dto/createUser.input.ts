@@ -24,6 +24,6 @@ export class CreateUserInput {
   phone: string;
 
   // 과제용 임시
-  @Field(() => Int, { defaultValue: 0 })
-  point: number;
+  // @Field(() => Int, { defaultValue: 0 })
+  // point: number;
 }

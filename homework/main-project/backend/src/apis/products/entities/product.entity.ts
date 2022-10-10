@@ -1,17 +1,13 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { ProductCategory } from 'src/apis/productsCategories/entities/productCategory.entity';
-import { ProductImage } from 'src/apis/productImages/entities/productImage.entity';
 import { ProductDiscount } from 'src/apis/productsDiscount/entities/productDiscount.entity';
 import {
   Column,
   DeleteDateColumn,
   Entity,
-  JoinTable,
-  ManyToMany,
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { OrderPayment } from 'src/apis/orderPayments/entities/orderPayment.entity';
 
 @Entity()
 @ObjectType()
@@ -52,6 +48,13 @@ export class Product {
   @Field(() => Int)
   stock: number;
 
+  // 이미지
+  @Column()
+  mainImgUrl: string;
+
+  @Column()
+  subImgUrl: string;
+
   @ManyToOne(() => ProductCategory)
   @Field(() => ProductCategory)
   productCategory: ProductCategory;
@@ -59,11 +62,6 @@ export class Product {
   @ManyToOne(() => ProductDiscount)
   @Field(() => ProductDiscount)
   productDiscount: ProductDiscount;
-
-  @JoinTable()
-  @ManyToMany(() => ProductImage, (ProductImages) => ProductImages.products)
-  @Field(() => [ProductImage])
-  productImages: ProductImage[];
 
   @DeleteDateColumn()
   @Field(() => Date, { nullable: true })

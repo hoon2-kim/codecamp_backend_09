@@ -43,7 +43,7 @@ export class User {
 
   // 과제용 임시
   @Column({ default: 0 })
-  @Field(() => Int)
+  // @Field(() => Int)
   point: number;
 
   @DeleteDateColumn()

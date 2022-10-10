@@ -38,8 +38,4 @@ export class CreateProductInput {
 
   @Field(() => ProductDiscountInput)
   productDiscount: ProductDiscountInput;
-
-  // N : M 관계
-  @Field(() => [String])
-  productImages: string[];
 }

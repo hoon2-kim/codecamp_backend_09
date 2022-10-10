@@ -10,18 +10,11 @@ type User {
   gender: String
   userGrade: String!
   phone: String!
-  point: Int!
 }
 
 type ProductCategory {
   id: String!
   categoryName: String!
-}
-
-type ProductImage {
-  id: String!
-  image: String!
-  products: [Product!]!
 }
 
 type ProductDiscount {
@@ -41,7 +34,6 @@ type Product {
   stock: Int!
   productCategory: ProductCategory!
   productDiscount: ProductDiscount!
-  productImages: [ProductImage!]!
   deletedAt: DateTime
 }
 
@@ -78,6 +70,7 @@ type Query {
 }
 
 type Mutation {
+  uploadFile(files: [Upload!]!): [String!]!
   createOrderPayment(impUid: String!, amount: Int!): OrderPayment!
   cancelPayment(impUid: String!, amount: Int!): OrderPayment!
   userLogin(email: String!, password: String!): String!
@@ -94,6 +87,9 @@ type Mutation {
   deleteLoginUser: Boolean!
 }
 
+"""The `Upload` scalar type represents a file upload."""
+scalar Upload
+
 input CreateProductInput {
   name: String!
   price: Int!
@@ -105,7 +101,6 @@ input CreateProductInput {
   stock: Int!
   productCategoryId: String!
   productDiscount: ProductDiscountInput!
-  productImages: [String!]!
 }
 
 input ProductDiscountInput {
@@ -123,7 +118,6 @@ input UpdateProductInput {
   stock: Int
   productCategoryId: String
   productDiscount: ProductDiscountInput
-  productImages: [String!]
 }
 
 input CreateUserInput {
@@ -134,7 +128,6 @@ input CreateUserInput {
   gender: String!
   userGrade: String = "Bronze"
   phone: String!
-  point: Int = 0
 }
 
 input UpdateUserInput {
@@ -145,5 +138,4 @@ input UpdateUserInput {
   gender: String
   userGrade: String = "Bronze"
   phone: String
-  point: Int = 0
 }
