@@ -2,6 +2,7 @@ import { Field, ObjectType } from '@nestjs/graphql';
 import { Product } from 'src/apis/products/entities/product.entity';
 import {
   Column,
+  CreateDateColumn,
   DeleteDateColumn,
   Entity,
   ManyToOne,
@@ -16,12 +17,12 @@ export class ProductImage {
   id: string;
 
   @Column()
-  @Field(() => String)
-  mainImgUrl: string;
-
-  @Column({ nullable: true })
   @Field(() => String, { nullable: true })
-  subImgUrl: string;
+  imgUrl: string;
+
+  @CreateDateColumn()
+  @Field(() => Date, { nullable: true })
+  createdAt: Date;
 
   @DeleteDateColumn()
   @Field(() => Date, { nullable: true })

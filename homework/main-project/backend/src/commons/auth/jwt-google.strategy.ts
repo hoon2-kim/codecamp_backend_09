@@ -1,6 +1,9 @@
+import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy } from 'passport-google-oauth20';
+import { Profile } from 'passport-naver-v2';
 
+@Injectable()
 export class JwtGoogleStrategy extends PassportStrategy(Strategy, 'google') {
   // 검사
   constructor() {
@@ -13,7 +16,11 @@ export class JwtGoogleStrategy extends PassportStrategy(Strategy, 'google') {
   }
 
   // 성공
-  validate(accessToken, refreshToken, profile) {
+  validate(
+    accessToken: string, //
+    refreshToken: string,
+    profile,
+  ) {
     console.log('access: ', accessToken);
     console.log('refresh: ', refreshToken);
     console.log(profile);

@@ -3,6 +3,7 @@ import { ProductCategory } from 'src/apis/productsCategories/entities/productCat
 import { ProductDiscount } from 'src/apis/productsDiscount/entities/productDiscount.entity';
 import {
   Column,
+  CreateDateColumn,
   DeleteDateColumn,
   Entity,
   ManyToOne,
@@ -25,35 +26,28 @@ export class Product {
   price: number;
 
   @Column()
-  @Field(() => Int)
+  @Field(() => Int, { nullable: true })
   deliveryPrice: number;
 
   @Column()
-  @Field(() => Int)
+  @Field(() => Int, { nullable: true })
   maxQ: number;
 
-  @Column({ type: 'timestamp' })
-  @Field(() => Date)
+  @CreateDateColumn()
+  @Field(() => Date, { nullable: true })
   createdAt: Date;
 
-  @Column({ type: 'timestamp', nullable: true })
+  @CreateDateColumn()
   @Field(() => Date, { nullable: true })
   updatedAt: Date;
 
   @Column()
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   contents: string;
 
   @Column()
-  @Field(() => Int)
+  @Field(() => Int, { nullable: true })
   stock: number;
-
-  // 이미지
-  @Column()
-  mainImgUrl: string;
-
-  @Column()
-  subImgUrl: string;
 
   @ManyToOne(() => ProductCategory)
   @Field(() => ProductCategory)

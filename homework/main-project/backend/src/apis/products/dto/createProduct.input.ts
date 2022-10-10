@@ -19,12 +19,6 @@ export class CreateProductInput {
   @Field(() => Int)
   maxQ: number;
 
-  @Field(() => Date)
-  createdAt: Date;
-
-  @Field(() => Date, { nullable: true })
-  updatedAt: Date;
-
   @Field(() => String)
   contents: string;
 
@@ -38,4 +32,7 @@ export class CreateProductInput {
 
   @Field(() => ProductDiscountInput)
   productDiscount: ProductDiscountInput;
+
+  @Field(() => [String], { nullable: true })
+  imgUrls: string[];
 }

@@ -26,12 +26,12 @@ type Product {
   id: String!
   name: String!
   price: Int!
-  deliveryPrice: Int!
-  maxQ: Int!
-  createdAt: DateTime!
+  deliveryPrice: Int
+  maxQ: Int
+  createdAt: DateTime
   updatedAt: DateTime
-  contents: String!
-  stock: Int!
+  contents: String
+  stock: Int
   productCategory: ProductCategory!
   productDiscount: ProductDiscount!
   deletedAt: DateTime
@@ -95,12 +95,11 @@ input CreateProductInput {
   price: Int!
   deliveryPrice: Int!
   maxQ: Int!
-  createdAt: DateTime!
-  updatedAt: DateTime
   contents: String!
   stock: Int!
   productCategoryId: String!
   productDiscount: ProductDiscountInput!
+  imgUrls: [String!]
 }
 
 input ProductDiscountInput {
@@ -112,12 +111,11 @@ input UpdateProductInput {
   price: Int
   deliveryPrice: Int
   maxQ: Int
-  createdAt: DateTime
-  updatedAt: DateTime
   contents: String
   stock: Int
   productCategoryId: String
   productDiscount: ProductDiscountInput
+  imgUrls: [String!]
 }
 
 input CreateUserInput {

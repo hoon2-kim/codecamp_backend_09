@@ -21,7 +21,7 @@ export class ProductService {
   // 전체조회
   findAll() {
     return this.productsRepository.find({
-      relations: ['productCategory', 'productDiscount', 'productImages'],
+      relations: ['productCategory', 'productDiscount'],
     });
   }
 
@@ -29,7 +29,7 @@ export class ProductService {
   findOne({ productId }) {
     return this.productsRepository.findOne({
       where: { id: productId },
-      relations: ['productCategory', 'productDiscount', 'productImages'],
+      relations: ['productCategory', 'productDiscount'],
     });
   }
 
@@ -43,56 +43,62 @@ export class ProductService {
 
   // 상품 만들기
   async create({ createProductInput }) {
-    const { productCategoryId, productDiscount, productImages, ...product } =
+    const { productCategoryId, productDiscount, imgUrls, ...product } =
       createProductInput;
+
+    console.log('img: ', imgUrls);
 
     const result = await this.productsDiscountRepository.save({
       ...productDiscount,
     });
 
-    // // productImages
-    // const temp = [];
-    // for (let i = 0; i < productImages.length; i++) {
-    //   const imagename = productImages[i];
+    const result2 = await this.productsRepository.save({
+      ...product,
+      productDiscount: result,
+      productCategory: {
+        id: productCategoryId,
+      },
+    });
 
-    //   const prevImage = await this.productsImageRepository.findOne({
-    //     where: { id: createProductInput.id},
-    //   });
-
-    //   if (prevImage) {
-    //     this.productsDiscountRepository.delete({ productId: createProductInput.id });
-    //     temp.push(prevImage);
-    //   } else {
-    //     const newImage = await this.productsImageRepository.save({
-    //       //
-    //     });
-    //     temp.push(newImage);
-    //   }
-    //   //
-    // }
-
-    // const result2 = await this.productsRepository.save({
-    //   ...product,
-    //   productDiscount: result,
-    //   productCategory: {
-    //     id: productCategoryId,
-    //   },
-    //   productImages: temp,
-    // });
-    // return result2;
+    // 이미지 테이블에 저장
+    await Promise.all(
+      imgUrls.map(async (el) => {
+        await this.productsImageRepository.save({
+          product: result2.id,
+          imgUrl: el,
+        });
+      }),
+    );
+    return result2;
   }
 
   // 상품 수정하기
   async update({ productId, updateProductInput }) {
+    const { imgUrls } = updateProductInput;
+
     const myproduct = await this.productsRepository.findOne({
       where: { id: productId },
     });
 
-    const result = this.productsRepository.save({
+    const result = await this.productsRepository.save({
       ...myproduct,
       id: productId,
       ...updateProductInput,
     });
+    // console.log('qwe123: ', result);
+
+    // 이미지 테이블 삭제 및 새로추가
+
+    await this.productsImageRepository.softDelete({ product: productId });
+    await Promise.all(
+      imgUrls.map(async (el) => {
+        await this.productsImageRepository.save({
+          product: result.id,
+          imgUrl: el,
+        });
+      }),
+    );
+
     return result;
   }
 

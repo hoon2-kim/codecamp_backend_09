@@ -1,4 +1,4 @@
-import { Storage } from '@google-cloud/storage';
+import { Storage } from '@google-cloud/storage'; // yarn add @google-cloud/storage
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
@@ -11,12 +11,12 @@ export class FilesService {
     const storage = new Storage({
       projectId: 'codecamp-backend09',
       keyFilename: 'gcp-file-storage.json',
-    }).bucket('codecamp-hoon2');
+    }).bucket('codecamp-hoon2'); // 스토리지 안에 버킷(폴더)
 
     // 세팅된 스토리지에 파일 올리기
     file
-      .createReadStream()
-      .pipe(storage.file(file.filename).createWriteStream()) // 파이프로 storage에 업로드
+      .createReadStream() // 파일읽기
+      .pipe(storage.file(file.filename).createWriteStream()) // 읽힌 파일이 파이프로 들어가고 스토리리지에 file.filename이름으로 저장해줘
       .on('finish', () => console.log('성공'))
       .on('error', () => console.log('실패'));
 
