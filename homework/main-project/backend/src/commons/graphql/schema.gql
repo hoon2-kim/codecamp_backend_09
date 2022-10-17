@@ -30,7 +30,7 @@ type Product {
   maxQ: Int
   createdAt: DateTime
   updatedAt: DateTime
-  contents: String
+  description: String!
   stock: Int
   productCategory: ProductCategory!
   productDiscount: ProductDiscount!
@@ -61,7 +61,7 @@ type BoardList {
 }
 
 type Query {
-  fetchProducts: [Product!]!
+  fetchProducts(search: String): [Product!]!
   fetchProduct(productId: String!): Product!
   fetchProductsWithDeleted: [Product!]!
   fetchUsers: [User!]!
@@ -74,6 +74,7 @@ type Mutation {
   createOrderPayment(impUid: String!, amount: Int!): OrderPayment!
   cancelPayment(impUid: String!, amount: Int!): OrderPayment!
   userLogin(email: String!, password: String!): String!
+  userLogout: String!
   restoreAccessToken: String!
   createProduct(createProductInput: CreateProductInput!): Product!
   updateProduct(productId: String!, updateProductInput: UpdateProductInput!): Product!
@@ -95,7 +96,7 @@ input CreateProductInput {
   price: Int!
   deliveryPrice: Int!
   maxQ: Int!
-  contents: String!
+  description: String!
   stock: Int!
   productCategoryId: String!
   productDiscount: ProductDiscountInput!
@@ -111,7 +112,7 @@ input UpdateProductInput {
   price: Int
   deliveryPrice: Int
   maxQ: Int
-  contents: String
+  description: String
   stock: Int
   productCategoryId: String
   productDiscount: ProductDiscountInput

@@ -42,8 +42,8 @@ export class Product {
   updatedAt: Date;
 
   @Column()
-  @Field(() => String, { nullable: true })
-  contents: string;
+  @Field(() => String)
+  description: string;
 
   @Column()
   @Field(() => Int, { nullable: true })

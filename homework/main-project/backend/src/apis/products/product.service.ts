@@ -25,6 +25,11 @@ export class ProductService {
     });
   }
 
+  // // 검색어 조회
+  // searchFind() {
+
+  // }
+
   // 개별조회
   findOne({ productId }) {
     return this.productsRepository.findOne({

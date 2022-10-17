@@ -20,7 +20,7 @@ export class CreateProductInput {
   maxQ: number;
 
   @Field(() => String)
-  contents: string;
+  description: string;
 
   @Min(0)
   @Field(() => Int)

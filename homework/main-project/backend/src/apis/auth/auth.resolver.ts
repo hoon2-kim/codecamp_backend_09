@@ -1,17 +1,31 @@
-import { UnprocessableEntityException, UseGuards } from '@nestjs/common';
+import {
+  CACHE_MANAGER,
+  Inject,
+  UnauthorizedException,
+  UnprocessableEntityException,
+  UseGuards,
+} from '@nestjs/common';
 import { Args, Context, Mutation, Resolver } from '@nestjs/graphql';
 import { UsersService } from '../users/users.service';
 import { AuthService } from './auth.service';
 import * as bcrypt from 'bcrypt';
 
-import { GqlAuthRefreshGuard } from 'src/commons/auth/gql-auth.guard';
+import {
+  GqlAuthAccessGuard,
+  GqlAuthRefreshGuard,
+} from 'src/commons/auth/gql-auth.guard';
 import { IContext } from 'src/commons/type/context';
+import { Cache } from 'cache-manager';
+import * as jwt from 'jsonwebtoken';
 
 @Resolver()
 export class AuthResolver {
   constructor(
     private readonly authService: AuthService, //
     private readonly userService: UsersService, //
+
+    @Inject(CACHE_MANAGER)
+    private readonly cacheManager: Cache,
   ) {}
 
   // 로그인
@@ -19,7 +33,6 @@ export class AuthResolver {
   async userLogin(
     @Args('email') email: string, //
     @Args('password') password: string,
-    // @CurrentUser() currentUser: IContext,
     @Context() context: IContext,
   ) {
     // 이메일 일치 유저 찾기
@@ -46,6 +59,43 @@ export class AuthResolver {
 
     // accessToken(=JWT) 만들기
     return this.authService.getAccessToken({ correctUser });
+  }
+
+  // 로그아웃
+  @UseGuards(GqlAuthAccessGuard)
+  @Mutation(() => String)
+  async userLogout(
+    @Context() context: IContext, //
+  ) {
+    try {
+      const auth = context.req.headers;
+      // console.log('a: ', context.req);
+      // console.log('access: ', auth['authorization']);
+      // console.log('refresh: ', auth['cookie']);
+
+      const access = auth['authorization'].replace('Bearer  ', '');
+      const refresh = auth['cookie'].replace('refreshToken=', '');
+
+      const accessJwt = jwt.verify(access, 'myAccessKey');
+      const refreshJwt = jwt.verify(refresh, 'myRefreshKey');
+
+      // console.log('h:', accessJwt);
+      // console.log('j:', refreshJwt);
+
+      // 레디스 토큰 저장
+      await this.cacheManager.set(`accessToken:${access}`, 'accessToken', {
+        ttl: refreshJwt['exp'] - refreshJwt['iat'], // 바꾸기
+      });
+
+      await this.cacheManager.set(`refreshToken:${refresh}`, 'refreshToken', {
+        ttl: accessJwt['exp'] - accessJwt['iat'], // 바꾸기
+      });
+    } catch (err) {
+      console.log(err);
+      throw new UnauthorizedException();
+    }
+
+    return '로그아웃에 성공했습니다.';
   }
 
   // 만료 토큰 재발급

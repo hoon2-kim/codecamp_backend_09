@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { ElasticsearchModule } from '@nestjs/elasticsearch';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ProductImage } from '../productImages/entities/productImage.entity';
 import { ProductDiscount } from '../productsDiscount/entities/productDiscount.entity';
@@ -13,6 +14,9 @@ import { ProductService } from './product.service';
       ProductDiscount,
       ProductImage,
     ]),
+    ElasticsearchModule.register({
+      node: 'http://elasticsearch:9200',
+    }),
   ],
   providers: [
     ProductResolver, //
