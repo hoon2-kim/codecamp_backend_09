@@ -23,10 +23,10 @@ export class ProductResolver {
   @Query(() => [Product])
   // @Query(() => String)
   async fetchProducts(
-    @Args('search', { nullable: true }) search: string, //
+    @Args({ name: 'search', nullable: true }) search: string, //
   ) {
-    // search:"" 로 검색시 전체 조회
-    if (search === '') {
+    // search:"" 로 검색시 전체 조회 / 그냥 fetchProducts만 적었을 때 전체 조회
+    if (search === '' || search === undefined) {
       return await this.productsService.findAll();
     }
     // redis에서 먼저 조회
@@ -36,10 +36,11 @@ export class ProductResolver {
     // 있다면 레디스에서 줌
     if (redisSearch) {
       return redisSearch;
-    } else {
-      // 없다면 엘라스틱에서 검색
+    }
+    // 없다면 엘라스틱에서 검색
 
-      // 검색어에 딱 맞는 단어만 검색
+    // 검색어에 딱 맞는 단어만 검색
+    else {
       const elasticSearch = await this.elasticsearchService.search({
         index: 'productsearch',
         query: {
@@ -76,7 +77,7 @@ export class ProductResolver {
 
       // 레디스에 저장
       await this.cacheManger.set(search, result, {
-        ttl: 1000,
+        ttl: 10000,
       });
 
       // return '조회완료';
@@ -84,7 +85,6 @@ export class ProductResolver {
       // return this.productsService.findAll();
     }
   }
-
   // 개별 조회
   @Query(() => Product)
   fetchProduct(@Args('productId') productId: string) {
