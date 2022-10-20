@@ -8,7 +8,6 @@ RUN yarn install
 
 COPY . /myfolder/
 
-# CMD yarn start:dev
-CMD ["./wait-for.sh", "my-database:3306", "--", "yarn", "start:dev"]
+CMD yarn start:dev
 
 # 효율적
