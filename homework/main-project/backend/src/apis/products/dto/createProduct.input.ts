@@ -35,4 +35,6 @@ export class CreateProductInput {
 
   @Field(() => [String], { nullable: true })
   imgUrls: string[];
+
+  // 할일 이미지 따로 만들기
 }
