@@ -1,0 +1,21 @@
+version: '3.7'
+
+services:
+  my-backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    # volumes:
+    #   - ./src:/myfolder/src  # 배포는 하면 끝임 배포 하고나서 수정이나 그런거 안함 하려면 재배포 해야함
+    ports:
+      - 3000:3000
+    env_file:
+      - ./.env.dev
+
+  my-database:
+    image: mysql:latest
+    environment:
+      MYSQL_DATABASE: 'mydev09'
+      MYSQL_ROOT_PASSWORD: 'root'
+    ports:
+      - 3306:3306
