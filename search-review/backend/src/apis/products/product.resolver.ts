@@ -20,9 +20,35 @@ export class ProductsResolver {
 
   // 전체조회
   @Query(() => [Product])
-  fetchProducts() {
-    return this.productsService.findAll(); // 이걸 리턴시키려면 Query안에 타입써줘야함
-    // 서비스에서 await 안 써도됨 왜냐면 브라우저에서 나가려면 여기서 알아서 기다림
+  async fetchProducts(
+    @Args('search') search: string, //
+  ) {
+    // 1. 레디스에 캐시되어 있는지 확인하기
+    console.time('메모리에 캐시된거 가져오기');
+    const productsCache = await this.cacheManager.get(`products:${search}`);
+    console.timeEnd('메모리에 캐시된거 가져오기');
+    if (productsCache) return productsCache;
+
+    // 2. 레디스에 캐시가 되어있지 않다면, 엘라스틱서치에서 조회하기(유저가 검색한 검색어로 조회하기)
+    console.time('디스크에 저장된거 가져오기');
+    const result = await this.elasticsearchService.search({
+      index: 'myproduct0999',
+      query: { match: { name: search } },
+    });
+    console.timeEnd('디스크에 저장된거 가져오기');
+    // console.log(JSON.stringify(result, null, '  '));
+    const products = result.hits.hits.map((el: any) => ({
+      id: el._source.id,
+      name: el._source.name,
+      price: el._source.price,
+    }));
+    // console.log(products);
+
+    // 3. 엘라스틱서치에서 조회 결과가 있다면, 레디스에 검색결과 캐싱해놓기
+    await this.cacheManager.set(`products:${search}`, products, { ttl: 0 });
+
+    // 4. 최종 결과 브라우저에 리턴해주기
+    return products;
   }
 
   // 개별조회

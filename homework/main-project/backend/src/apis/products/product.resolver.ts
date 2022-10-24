@@ -77,7 +77,7 @@ export class ProductResolver {
 
       // 레디스에 저장
       await this.cacheManger.set(search, result, {
-        ttl: 10000,
+        ttl: 0,
       });
 
       // return '조회완료';

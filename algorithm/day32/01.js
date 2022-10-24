@@ -37,7 +37,7 @@
 
 // 멘토님
 const isBonus = ["S", "D", "T"]; // 보너스를 체크하기 위한 배열
-const option = ["*", "#"]; // 옵션을 체크하기 위ㅏㅎ
+const option = ["*", "#"]; // 옵션을 체크하기 위한 배열
 
 function solution(dartResult) {
     const answer = [];

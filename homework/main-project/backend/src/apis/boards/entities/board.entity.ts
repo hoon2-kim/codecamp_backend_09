@@ -1,7 +1,14 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 import { BoardList } from 'src/apis/boardLists/entities/boarList.entity';
 import { User } from 'src/apis/users/entities/user.entity';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 
 @Entity()
 @ObjectType()
@@ -18,17 +25,13 @@ export class Board {
   @Field(() => String)
   contents: string;
 
-  @Column({ type: 'timestamp' })
+  @CreateDateColumn()
   @Field(() => Date)
   createdAt: Date;
 
-  @Column({ type: 'timestamp' })
+  @UpdateDateColumn()
   @Field(() => Date)
   updatedAt: Date;
-
-  @Column({type: 'boolean'})
-  @Field(() => Boolean)
-  isSecret: boolean;
 
   @ManyToOne(() => User)
   @Field(() => User)

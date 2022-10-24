@@ -33,9 +33,8 @@
 
 // 멘토님
 function solution(board, moves) {
-    let answer = 0;
     const bucket = []; // 뽑은 인형들이 담겨지는 배열
-
+    let answer = 0;
     // 1. 크레인이 이동하는 위치값을 구하는 반복문
     for (let i = 0; i < moves.length; i++) {
         for (let j = 0; j < board.length; j++) {
@@ -49,8 +48,8 @@ function solution(board, moves) {
                 // 바구니에 인형을 넣으려고 할 때,
                 // 바구니의 맨 위에 있는 인형이 현재 넣으려는 인형과 같다면, 바구니 맨위의 인형을 제거
                 if (bucket[bucket.length - 1] === doll) {
-                    bucket.pop();
                     answer += 2;
+                    bucket.pop();
                     break;
                 }
 
@@ -61,6 +60,7 @@ function solution(board, moves) {
             }
         }
     }
+    return answer;
 }
 
 // 새로운 배열 메소드 at
