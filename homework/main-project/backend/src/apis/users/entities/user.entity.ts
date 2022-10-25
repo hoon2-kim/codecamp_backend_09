@@ -1,9 +1,11 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 import {
   Column,
+  CreateDateColumn,
   DeleteDateColumn,
   Entity,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 
 @Entity()
@@ -23,11 +25,12 @@ export class User {
 
   @Column()
   // @Field(() => String)
+  @Field(() => String, { nullable: true })
   password: string;
 
-  @Column({ nullable: true })
-  @Field(() => String, { nullable: true })
-  birth: string;
+  // @Column({ nullable: true })
+  // @Field(() => String, { nullable: true })
+  // birth: string;
 
   @Column({ nullable: true })
   @Field(() => String, { nullable: true })
@@ -41,10 +44,21 @@ export class User {
   @Field(() => String)
   phone: string;
 
-  // 과제용 임시
   @Column({ default: 0 })
   // @Field(() => Int)
   point: number;
+
+  @Column({ default: false })
+  @Field(() => Boolean, { nullable: true })
+  isSocialUser: boolean;
+
+  @CreateDateColumn()
+  @Field(() => Date)
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  @Field(() => Date)
+  updatedAt: Date;
 
   @DeleteDateColumn()
   deletedAt: Date;

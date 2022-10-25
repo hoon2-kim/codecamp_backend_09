@@ -1,4 +1,4 @@
-import { Field, InputType, Int } from '@nestjs/graphql';
+import { Field, InputType } from '@nestjs/graphql';
 
 @InputType()
 export class CreateUserInput {
@@ -11,19 +11,18 @@ export class CreateUserInput {
   @Field(() => String)
   password: string;
 
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   birth: string;
 
   @Field(() => String)
   gender: string;
 
-  @Field(() => String, { defaultValue: 'Bronze' })
-  userGrade: string;
+  // @Field(() => String, { defaultValue: 'Bronze' })
+  // userGrade: string;
+
+  @Field(() => Boolean, { nullable: true })
+  isSocialUser: boolean;
 
   @Field(() => String)
   phone: string;
-
-  // 과제용 임시
-  // @Field(() => Int, { defaultValue: 0 })
-  // point: number;
 }

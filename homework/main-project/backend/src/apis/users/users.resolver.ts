@@ -15,21 +15,18 @@ export class UsersResolver {
   ) {}
 
   // 전체조회
-  @UseGuards(GqlAuthAccessGuard)
   @Query(() => [User])
   fetchUsers() {
     return this.usersService.findAll();
   }
 
   // 개별조회
-  @UseGuards(GqlAuthAccessGuard)
   @Query(() => User)
   fetchUser(@Args('email') email: string) {
     return this.usersService.findOne({ email });
   }
 
   // 로그인유저 조회
-  @UseGuards(GqlAuthAccessGuard)
   @Query(() => User)
   fetchLoginUser(
     @CurrentUser() currentUser: any, //

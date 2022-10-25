@@ -1,0 +1,15 @@
+FROM node:14
+
+# 커서위치는 아무데나 해도 상관없음
+WORKDIR /myfolder/
+COPY ./package.json /myfolder/
+COPY ./yarn.lock /myfolder/
+RUN yarn install --production
+# 배포할 때는 devDependencies는 필요없으므로
+
+COPY . /myfolder/
+RUN yarn build 
+# yarn build 는 nest build기 때문에 dev디펜더시에 있는 "@nestjs/cli": "^9.0.0", 를 디펜더시로 옮기기
+CMD yarn start:prod
+
+# 효율적

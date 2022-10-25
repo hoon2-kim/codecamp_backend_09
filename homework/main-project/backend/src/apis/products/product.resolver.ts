@@ -50,8 +50,6 @@ export class ProductResolver {
         },
       });
 
-      // 만약 엘라스틱에도 없다면 [] 빈배열 반환 , 처음에 오류를 보내줄까 생각했지만 검색결과가 없다는 것이 오류는 아니라고 생각해서 일단 놔뒀습니다.
-
       // 검색어를 포함한 검색
       // const elasticSearch = await this.elasticsearchService.search({
       //   index: 'productsearch',
