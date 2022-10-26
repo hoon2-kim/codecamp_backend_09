@@ -11,7 +11,7 @@ export class AuthService {
   getAccessToken({ user }) {
     return this.jwtService.sign(
       { email: user.email, sub: user.id }, // 페이로드(데이터 저장, JWT는 누구든지 볼 수 있어 많은 데이터를 저장하지 않는게 좋음)
-      { secret: 'myAccessKey', expiresIn: '1h' }, // 서명하는 부분, secret은 비밀번호고 문자열 형태로 작성
+      { secret: process.env.ACCESS_TOKEN_KEY, expiresIn: '1h' }, // 서명하는 부분, secret은 비밀번호고 문자열 형태로 작성
     );
   }
 
@@ -19,7 +19,7 @@ export class AuthService {
   setRefreshToken({ user, res }) {
     const refreshToken = this.jwtService.sign(
       { email: user.email, sub: user.id }, // 페이로드
-      { secret: 'myRefreshKey', expiresIn: '2w' }, // 서명하는 부분
+      { secret: process.env.REFRESH_TOKEN_KEY, expiresIn: '2w' }, // 서명하는 부분
     );
 
     // 개발환경 - 소셜로그인은 개발환경에도 path 넣어줘야함

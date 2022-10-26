@@ -18,7 +18,7 @@ export class JwtRefreshStrategy extends PassportStrategy(Strategy, 'refresh') {
         const refreshToken = cookie.replace('refreshToken=', '');
         return refreshToken;
       }, // 이건 함수 직접 만들어야함
-      secretOrKey: 'myRefreshKey', // 비밀번호 입력했던거
+      secretOrKey: process.env.REFRESH_TOKEN_KEY, // 비밀번호 입력했던거
       // 그래서 accessToken 이랑 'myAccessKey'랑 맞는지 검증함
     });
   }

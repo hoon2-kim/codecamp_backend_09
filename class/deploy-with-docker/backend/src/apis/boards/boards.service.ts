@@ -13,7 +13,7 @@ export class BoardsService {
     const result = [
       {
         number: 1,
-        writer: '철수',
+        writer: '철수(수정됨)',
         title: '제목입니다~~',
         contents: '내용이에요!!',
       },

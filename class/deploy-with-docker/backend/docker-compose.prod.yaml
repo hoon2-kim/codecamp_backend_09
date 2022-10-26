@@ -2,7 +2,7 @@ version: '3.7'
 
 services:
   my-backend:
-    image: asia.gcr.io/codecamp-backend09/mybackend09-nestjs:1.0 # asia.gcr.io/[프로젝트ID]/[폴더명]:[버전] # 새로 배포할 때 마다 버전 바꿔줘야함
+    image: asia.gcr.io/codecamp-backend09/mybackend09-nestjs:7.0 # asia.gcr.io/[프로젝트ID]/[폴더명]:[버전] # 새로 배포할 때 마다 버전 바꿔줘야함
     build:
       context: .
       dockerfile: Dockerfile.prod
