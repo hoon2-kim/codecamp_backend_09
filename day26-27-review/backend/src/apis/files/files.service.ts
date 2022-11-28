@@ -28,6 +28,7 @@ export class FilesService {
     console.log(waitedFiles); // [file, file]
 
     // 세팅된 스토리지에 파일 올리기
+
     const urls = await Promise.all(
       waitedFiles.map(
         // map이 배열이니 배열 따로 안만들어도됨
@@ -39,7 +40,11 @@ export class FilesService {
             file
               .createReadStream()
               .pipe(storage.file(fname).createWriteStream()) // 파이프로 storage에 업로드
-              .on('finish', () => resolve(`${STORAGE_BUCKET}/${fname}`)) // 앞에 구글 주소도 있는데 그건 프론트쪽에서, on은 업로드 되고나서야 실행됨
+              .on('finish', () =>
+                resolve(
+                  `https://storage.googleapis.com/${STORAGE_BUCKET}/${fname}`,
+                ),
+              ) // 앞에 구글 주소도 있는데 그건 프론트쪽에서, on은 업로드 되고나서야 실행됨
               .on('error', () => reject('실패'));
           }),
       ),

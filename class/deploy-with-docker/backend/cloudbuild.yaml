@@ -23,3 +23,4 @@ steps:
     env:
       - CLOUDSDK_COMPUTE_ZONE=asia-northeast3
       - CLOUDSDK_CONTAINER_CLUSTER=autopilot-cluster-1
+# 버전 여기랑 docker-compose.prod.yaml 둘 다 올려줘야함

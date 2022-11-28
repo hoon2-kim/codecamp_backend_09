@@ -1,0 +1,21 @@
+version: "3.7"
+
+services:
+  my-backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./index.js:/myfolder/index.js
+      - ./email.js:/myfolder/email.js
+    # - ./src:/myfolder/src # 근데 하나씩 이렇게 추가하다보면 코드가 길어지니 src폴더에 넣어놓고 함
+    ports:
+      - 3000:3000
+
+  my-database:
+    image: mongo:5
+    ports:
+      - 27017:27017
+# 단순히 다운로드 하나만 받는 경우 도커파일 따로 안만들고 여기서 image: mongo:5하면 됨
+
+# package.json이 바뀌면 volumes하는 의미없음 다시 yarn install 해야하므로

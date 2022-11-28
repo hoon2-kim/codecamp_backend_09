@@ -53,11 +53,9 @@ export class User {
   isSocialUser: boolean;
 
   @CreateDateColumn()
-  @Field(() => Date)
   createdAt: Date;
 
   @UpdateDateColumn()
-  @Field(() => Date)
   updatedAt: Date;
 
   @DeleteDateColumn()
